@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "port": 8080,
+  "timeout": "3000ms",
+  "cache_ttl": "300s",
+  "output_encoding": "json",
+  "endpoints": [
+    {
+      "endpoint": "/baccarat.provablyfair.ro/{resource}",
+      "method": "POST",
+      "output_encoding": "json",
+      "concurrent_calls": 1,
+      "backend": [
+        {
+          "url_pattern": "/{resource}",
+          "encoding": "json",
+          "sd": "static",
+          "host": [
+            "https://baccarat.provablyfair.ro"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/slots.provablyfair.ro/{resource}",
+      "method": "POST",
+      "output_encoding": "json",
+      "concurrent_calls": 1,
+      "backend": [
+        {
+          "url_pattern": "/{resource}",
+          "encoding": "json",
+          "sd": "static",
+          "host": [
+            "https://slots.provablyfair.ro"
+          ]
+        }
+      ]
+    }
+  ]
+}
