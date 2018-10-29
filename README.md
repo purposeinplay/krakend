@@ -2,7 +2,8 @@
 
 ## Build
 
-	go get github.com/ProvablyFair/krakend/martian
+	go get github.com/ProvablyFair/krakend
+	# ignore the errors
 	cd $GOPATH/src/github.com/ProvablyFair/krakend/
 	make
 
