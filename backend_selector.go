@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"github.com/devopsfaith/krakend/logging"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/google/martian/parse"
 )
@@ -27,8 +29,11 @@ var Err404 = errors.New("unnknown game")
 // ModifyRequest extracts the value of the `Game` field from the request and updates the
 // Host of the request URL using in the injected mapping
 func (b *BackendSelector) ModifyRequest(req *http.Request) error {
+	logger, _ := logging.NewLogger("info", os.Stdout, "[KRAKEND]")
+	logger.Info("available games are", b.Mapping)
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
+		logger.Error("error decoding body", err)
 		return err
 	}
 	req.Body.Close()
@@ -36,10 +41,12 @@ func (b *BackendSelector) ModifyRequest(req *http.Request) error {
 
 	s := new(Session)
 	if err := json.Unmarshal(body, s); err != nil {
+		logger.Error("error unmarshalling body", err)
 		return err
 	}
-
+	logger.Info("session is", s)
 	backend, ok := b.Mapping[s.Game]
+	logger.Error("backend url is", backend)
 	if !ok {
 		return Err404
 	}
@@ -55,6 +62,16 @@ type Session struct {
 
 // backendSelectorFromJSON is the factory used by the martian package to instantiate
 // the modifier registered under the name "provablyFair.BackendSelector"
+func backendSelectorFromJSON(b []byte) (*parse.Result, error) {
+	mapping := map[string]string{}
+
+	if err := json.Unmarshal(b, &mapping); err != nil {
+		return nil, err
+	}
+
+	return parse.NewResult(&BackendSelector{Mapping: mapping}, []parse.ModifierType{parse.Request})
+}
+
 func backendSelectorFromJSON(b []byte) (*parse.Result, error) {
 	mapping := map[string]string{}
 
