@@ -11,9 +11,10 @@ import (
 func TestBackendSelector(t *testing.T) {
 	bs := BackendSelector{
 		Mapping: map[string]string{
-			"mjolnir-slots": "abc",
+			"mjolnir-slots": "abc:8080",
 		},
 	}
+	checkedBodies := 0
 	for i, tc := range []struct {
 		host         string
 		body         string
@@ -23,7 +24,7 @@ func TestBackendSelector(t *testing.T) {
 		{
 			host:         "example.com",
 			body:         sampleSessionBody,
-			expectedHost: "abc",
+			expectedHost: "abc:8080",
 			expectedErr:  nil,
 		},
 		{
@@ -43,12 +44,29 @@ func TestBackendSelector(t *testing.T) {
 		if err != nil {
 			t.Errorf("%d: %s", i, err.Error())
 		}
-		if err := bs.ModifyRequest(req); err != tc.expectedErr {
+		err = bs.ModifyRequest(req)
+		if err != tc.expectedErr {
 			t.Errorf("%d: unexpected error: %s", i, err.Error())
 		}
 		if tc.expectedHost != req.URL.Host {
 			t.Errorf("%d: unexpected host: %s", i, req.URL.Host)
 		}
+		if err == nil {
+			b, err := ioutil.ReadAll(req.Body)
+			if err != nil {
+				t.Error(err)
+				return
+			}
+			if string(b) != string(tc.body) {
+				t.Errorf("unexpected request body: %s", string(b))
+				return
+			}
+			checkedBodies++
+		}
+	}
+
+	if checkedBodies == 0 {
+		t.Errorf("the test did not check a single final request body")
 	}
 
 }
