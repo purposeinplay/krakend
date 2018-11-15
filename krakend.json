@@ -4,11 +4,11 @@
   "timeout": "3000ms",
   "cache_ttl": "300s",
   "host": [
-    "https://provablyfair.ro"
+    "http://example.com"
   ],
   "extra_config": {
     "github_com/devopsfaith/krakend-gologging": {
-      "level": "INFO",
+      "level": "DEBUG",
       "prefix": "[KRAKEND]",
       "stdout": true
     }
@@ -43,11 +43,13 @@
     },
     {
       "endpoint": "/sessions",
+      "output_encoding": "no-op",
       "method": "POST",
       "backend": [
         {
           "url_pattern": "/sessions",
-          "extra-config":{
+          "encoding": "no-op",
+          "extra_config":{
             "github.com/devopsfaith/krakend-martian": {
               "fifo.Group": {
                 "aggregateErrors": true,
