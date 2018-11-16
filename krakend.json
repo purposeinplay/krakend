@@ -4,7 +4,7 @@
   "timeout": "3000ms",
   "cache_ttl": "300s",
   "host": [
-    "http://example.com"
+    "mjolnir.mbit-jorge-portfolio.host"
   ],
   "extra_config": {
     "github_com/devopsfaith/krakend-gologging": {
@@ -15,8 +15,20 @@
   },
   "endpoints": [
     {
+      "endpoint": "/",
+      "output_encoding": "no-op",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/",
+          "host": ["mjolnir.mbit-jorge-portfolio.host"],
+          "encoding": "no-op"
+        }
+      ]
+    },
+    {
       "endpoint": "/demo",
-      "method": "POST",
+      "method": "GET",
       "backend": [
         {
           "url_pattern": "/demo"
@@ -44,6 +56,9 @@
     {
       "endpoint": "/sessions",
       "output_encoding": "no-op",
+      "headers_to_pass": [
+        "X-Request-Sign"
+      ],
       "method": "POST",
       "backend": [
         {
@@ -56,7 +71,7 @@
                 "modifiers": [
                   {
                     "provablyFair.BackendSelector": {
-                      "name_0": "backend_0"
+                      "mjolnir-slots": "mjolnir.mbit-jorge-portfolio.host"
                     }
                   }
                 ],
