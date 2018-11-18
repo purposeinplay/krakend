@@ -1,0 +1,74 @@
+{
+  "version": 2,
+  "port": 8080,
+  "timeout": "3000ms",
+  "cache_ttl": "300s",
+  "host": [
+    "http://backend_a:8080"
+  ],
+  "extra_config": {
+    "github_com/devopsfaith/krakend-gologging": {
+      "level": "DEBUG",
+      "prefix": "[KRAKEND]",
+      "stdout": true
+    }
+  },
+  "endpoints": [
+    {
+      "endpoint": "/demo",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/demo"
+        }
+      ]
+    },
+    {
+      "endpoint": "/freespins/issue",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/freespins/issue"
+        }
+      ]
+    },
+    {
+      "endpoint": "/freespins/cancel",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/freespins/cancel"
+        }
+      ]
+    },
+    {
+      "endpoint": "/sessions",
+      "output_encoding": "no-op",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/sessions",
+          "encoding": "no-op",
+          "extra_config":{
+            "github.com/devopsfaith/krakend-martian": {
+              "fifo.Group": {
+                "aggregateErrors": true,
+                "modifiers": [
+                  {
+                    "provablyFair.BackendSelector": {
+                      "mjolnir-slots": "backend_b:8080"
+                    }
+                  }
+                ],
+                "scope": [
+                    "request",
+                    "response"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
