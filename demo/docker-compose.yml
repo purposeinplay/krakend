@@ -12,8 +12,6 @@ services:
       - "8001:8080"
   krakend:
     image: devopsfaith/krakend:custom
-    environment:
-      - USAGE_DISABLE=1
     volumes:
       - ./krakend.json:/etc/krakend/krakend.json
     ports:
