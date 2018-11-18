@@ -43,12 +43,11 @@
     },
     {
       "endpoint": "/sessions",
-      "output_encoding": "no-op",
+      "headers_to_pass": ["X-Request-Sign"],
       "method": "POST",
       "backend": [
         {
           "url_pattern": "/sessions",
-          "encoding": "no-op",
           "extra_config":{
             "github.com/devopsfaith/krakend-martian": {
               "fifo.Group": {
