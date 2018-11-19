@@ -43,7 +43,7 @@
     },
     {
       "endpoint": "/sessions",
-      "headers_to_pass": ["X-Request-Sign"],
+      "headers_to_pass": ["X-Request-Sign", "Content-Type"],
       "method": "POST",
       "backend": [
         {
