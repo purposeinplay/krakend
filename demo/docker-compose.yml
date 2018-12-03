@@ -1,5 +1,10 @@
 version: "3"
 services:
+  client:
+    build:
+      context: ./client
+    ports:
+      - "3000:8080"
   backend_a:
     build:
       context: ./backend
@@ -16,6 +21,5 @@ services:
       - ./krakend.json:/etc/krakend/krakend.json
     ports:
       - "8080:8080"
-    depends_on:
-      - backend_a
-      - backend_b
+    environment:
+      - USAGE_DISABLE=1

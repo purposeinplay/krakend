@@ -8,7 +8,7 @@ build:
 		cp backend_selector.go krakend-ce/.
 		cp handler_factory.go krakend-ce/.
 		cat gopkg.toml.partial >> krakend-ce/Gopkg.toml
-		cd krakend-ce && make docker_build_alpine && VERSION=${KRAKENDCE_VERSION}-custom make -e krakend_docker
+		cd krakend-ce && make docker_build_alpine && VERSION=custom make -e krakend_docker
 
 clean:
 		rm -rf krakend-ce

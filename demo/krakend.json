@@ -42,6 +42,30 @@
       ]
     },
     {
+      "endpoint": "/client",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/",
+          "encoding": "no-op",
+          "host": [ "http://client:8080" ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/mjolnir",
+      "backend": [
+        {
+          "url_pattern": "/ws-mjolnir/",
+          "disable_host_sanitize": true,
+          "host": [ "ws://backend_b:8080" ]
+        }
+      ],
+      "extra_config":{
+        "github.com/ProvablyFair/krakend/websocket": true
+      }
+    },
+    {
       "endpoint": "/sessions",
       "headers_to_pass": ["X-Request-Sign", "Content-Type"],
       "method": "POST",

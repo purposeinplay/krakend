@@ -22,7 +22,7 @@ type BackendSelector struct {
 
 // Err404 is the error returned by the modifier if the requested game is not defined
 // in the mapping injected to the BackendSelector
-var Err404 = errors.New("unnknown game")
+var Err404 = errors.New("unknown game")
 
 // ModifyRequest extracts the value of the `Game` field from the request and updates the
 // Host of the request URL using in the injected mapping

@@ -73,10 +73,11 @@ type handlerFactory struct {
 func (w *handlerFactory) Handler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		keys := map[string]interface{}{
-			"uuid": uuid.NewV4().String(),
+			"uuid":        uuid.NewV4().String(),
+			"querystring": c.Request.URL.Query(),
 		}
 		for _, param := range c.Params {
-			keys[strings.Title(param.Key)] = param.Value
+			keys["params-"+strings.Title(param.Key)] = param.Value
 		}
 		w.m.HandleRequestWithKeys(c.Writer, c.Request, keys)
 	}
